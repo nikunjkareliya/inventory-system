@@ -6,7 +6,7 @@ using UnityEngine;
 public class InventoryItemData : ScriptableObject
 {    
     public string itemName;
-    public ItemType itemType;     
+    public ItemType itemType;            
     public Sprite icon;   
 }
 

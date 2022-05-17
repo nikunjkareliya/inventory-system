@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: Armor
   m_EditorClassIdentifier: 
   itemName: Armor
+  itemType: 0
   icon: {fileID: 21300000, guid: d659f7396cd57754eba78763cf986c51, type: 3}

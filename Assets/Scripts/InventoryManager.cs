@@ -4,56 +4,40 @@ using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
 {
-    [SerializeField] InventoryUI inventoryUI;
+    //[SerializeField]
+    public InventoryUI inventoryUI;
 
     public Dictionary<InventoryItemData, InventoryItem> itemDictionary;
-    public List<InventoryItem> inventory;
-    //public Dictionary<InventoryItem, InventoryItemData> itemDictionary;
-
-    public static InventoryManager Instance;
-
+    public List<InventoryItem> loadouts; 
+    public List<InventoryItem> inventory; 
+    
     public static event System.Action<InventoryItem> OnItemAdded;
     public static event System.Action<InventoryItem> OnItemRemoved;
+
+    public static InventoryManager Instance;
 
     private void Awake()
     {
         Instance = this;
         inventory = new List<InventoryItem>();              
-        itemDictionary = new Dictionary<InventoryItemData, InventoryItem>();
+        itemDictionary = new Dictionary<InventoryItemData, InventoryItem>();        
+    }
+
+    private void Start()
+    {        
+        if (loadouts.Count > 0)
+        {
+            foreach (InventoryItem item in loadouts)
+            {
+                // Debug.Log("Loadouts: " + item.GetData().name + " Item count: " + item.stackSize);
+                for (int i = 0; i < item.stackSize; i++) {
+                    Add(item.GetData());
+                }
+            }
+        }
 
         inventoryUI.Init();
     }
-    
-    //public void Add(InventoryItem item, InventoryItemData itemData)
-    //{
-
-    //    if (itemDictionary.ContainsKey(item))
-    //    {
-    //        item.AddToStack();
-    //    }
-    //    else
-    //    {
-    //        InventoryItem newItem = new InventoryItem();
-    //        newItem.SetData(itemData);
-
-    //        itemDictionary.Add(newItem, itemData);
-    //        inventory.Add(newItem);
-    //    }
-    //}
-
-    //public void Remove(InventoryItem item)
-    //{
-    //    if (itemDictionary.ContainsKey(item))
-    //    {
-    //        item.RemoveFromStack();
-
-    //        if(item.stackSize == 0)
-    //        {
-    //            itemDictionary.Remove(item);
-    //            inventory.Remove(item);
-    //        }
-    //    }
-    //}
 
     public void Add(InventoryItemData data)
     {
@@ -61,8 +45,7 @@ public class InventoryManager : MonoBehaviour
         if (itemDictionary.TryGetValue(data, out InventoryItem item))
         {
             item.AddToStack();
-            RaiseItemAdded(item);
-            Debug.Log("Key exists");
+            RaiseItemAdded(item);            
         }
         else
         {
@@ -71,8 +54,7 @@ public class InventoryManager : MonoBehaviour
             RaiseItemAdded(newItem);
 
             inventory.Add(newItem);
-            itemDictionary.Add(data, newItem);
-            Debug.Log("Key does not exist");
+            itemDictionary.Add(data, newItem);            
         }
     }
 
